@@ -1,6 +1,8 @@
 import numpy as np
 from matplotlib import pyplot as plt
+
 from collections import Counter
+from cmsketch import CountMinSketch
 
 def plot_stats(counts, cm):
     values = np.array(sorted(counts.keys()))
