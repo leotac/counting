@@ -68,7 +68,7 @@ class CountMinSketch:
         
         if self.noise_correction == 'median':
             # Estimate noise as median of values of cells in each row.
-            # For simplicity (and speed), not removing the 
+            # For simplicity (and speed), not removing the cell of x 
             noise = np.median(self.X, axis=1)
 
         corrected_estimate = np.median(self.X[range(self.d), self.hash(x)] - noise)
@@ -77,15 +77,12 @@ class CountMinSketch:
     def __getitem__(self, x: int):
         return self.count(x)
 
-    def guarantee(self, cardinality: int):
-        """ Compute the error guarantees given a number of elements. """
+    def print_stats(self):
+        """ Print some stats. """
+        cardinality = np.sum(self.X[0,:])
         error = self.ϵ * cardinality
         probability = 1 - self.δ
-        return error, probability
 
-    def print_stats(self):
-        cardinality = np.sum(self.X[0,:])
-        err, prob = self.guarantee(cardinality)
         print(f"The total count seen so far is: {cardinality}.")
-        print(f"Count estimates have an error ≤ {err} with probability {prob}.")
+        print(f"Count estimates have an error ≤ {error} with probability {probability}.")
 
