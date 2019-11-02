@@ -1,9 +1,11 @@
 import numpy as np
 import math
 
+from shish import Hash
+
 class CountMinSketch:
 
-    def __init__(self, ϵ: int, δ: int, noise_correction: str=None):
+    def __init__(self, ϵ: float, δ: float, noise_correction: str=None):
         """
         Keeps an approximate count of each distinct value seen in a data stream [1,2].
         This implementation only works for *positive* counts.
@@ -25,25 +27,10 @@ class CountMinSketch:
 
         self.w, self.d = math.ceil(math.e/ϵ), math.ceil(math.log(1/δ))
         self.X = np.zeros((self.d, self.w), dtype=int)
-        print(f"Relative error bound: {self.ϵ} with probability {1-self.δ}.")
         print(f"Instantiated a sketch with size: ({self.d}, {self.w}).")
+        print(f"Relative error bound: {self.ϵ} with probability {1-self.δ}.")
 
-        # Initialize constants used by hash functions
-        self.p = 2**31 - 1
-        self.a = np.random.randint(self.p, size=self.d)
-        self.b = np.random.randint(self.p, size=self.d)
-
-    def hash(self, x: int):
-        """ Computes d pairwise independent hashes of input value x.
-            Hash functions implemented as suggested in [2].
-
-            Args:
-                x: the input value whose hashes we want to compute
-            
-            Returns:
-                A numpy array of shape (d,) containing d hashes of x.
-        """
-        return np.mod(np.mod(self.a * x + self.b, self.p), self.w)
+        self.hash = Hash(self.d, self.w)
 
     def update(self, x: int, v: int=1):
         assert v >= 0, "Current implementation only supports non-negative updates"
@@ -77,7 +64,7 @@ class CountMinSketch:
     def __getitem__(self, x: int):
         return self.count(x)
 
-    def print_stats(self):
+    def stats(self):
         """ Print some stats. """
         cardinality = np.sum(self.X[0,:])
         error = self.ϵ * cardinality
