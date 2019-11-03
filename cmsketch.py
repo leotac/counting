@@ -9,7 +9,7 @@ class CountMinSketch:
         """
         Keeps an approximate count of each distinct value seen in a data stream [1,2].
         This implementation only works for *positive* counts.
-        
+       
         Args:
             ϵ (float): controls the magnitude of the error
             δ (float): controls the fraction of estimates
@@ -20,7 +20,7 @@ class CountMinSketch:
         [1] G. Cormode, S. Muthukrishnan. An Improved Data Stream Summary:
                                           The Count-Min Sketch and its Applications
         [2] G. Cormode, S. Muthukrishnan. Approximating Data with the Count-Min Data Structure
-        [3] F. Deng, D. Rafiei. New Estimation Algorithms for Streaming Data: Count-min Can Do More 
+        [3] F. Deng, D. Rafiei. New Estimation Algorithms for Streaming Data: Count-min Can Do More
         """
         self.ϵ, self.δ = ϵ, δ
         self.noise_correction = noise_correction
@@ -43,19 +43,19 @@ class CountMinSketch:
         Else, use one of the variants proposed in [3].
         Note that noise correction does not give necessarily better results.
         """
-        
+       
         raw_estimate = min(self.X[range(self.d), self.hash(x)])
         if not self.noise_correction:
             return raw_estimate
-        
+       
         if self.noise_correction == 'mean':
             # Estimate noise as average of values of other cells (per each row)
             cardinality = np.sum(self.X[0,:])
             noise = (cardinality - self.X[range(self.d), self.hash(x)])/(self.w - 1)
-        
+       
         if self.noise_correction == 'median':
             # Estimate noise as median of values of cells in each row.
-            # For simplicity (and speed), not removing the cell of x 
+            # For simplicity (and speed), not removing the cell of x
             noise = np.median(self.X, axis=1)
 
         corrected_estimate = np.median(self.X[range(self.d), self.hash(x)] - noise)

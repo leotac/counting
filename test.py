@@ -48,7 +48,7 @@ def test_cminsketch():
     for x, c in counts.items():
         cm.update(x, c)
     plot_stats(counts,cm)
-    
+   
     cm = CountMinSketch(0.01, 0.01, noise_correction='mean')
     for x, c in counts.items():
         cm.update(x, c)
@@ -73,7 +73,7 @@ def test_bloom():
         M, d = BloomFilter.optimal_size(p, N)
         print(f"Desired FP rate: {100*p:.2f}%, size of Bloom filter: "
               f"{M} bits (with {d} hash functions)")
-        
+       
         bf = BloomFilter(M, d, s)
 
         test_set = np.random.choice(1_000_000, 100_000)
@@ -85,12 +85,12 @@ def test_bloom():
                 else:
                     tn += 1
         print(f"Estimated FP rate: {100*fp/(fp + tn):.2f}% (from {fp + tn} negative samples)")
-                
+               
 
 if __name__ == '__main__':
     print("##### Count Min Sketch:")
     test_cminsketch()
-    
+   
     print("\n##### Bloom filter:")
     test_bloom()
 

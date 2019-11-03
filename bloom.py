@@ -30,7 +30,7 @@ class BloomFilter:
 
     def _add(self, x: int):
         assert x >= 0, "Only non-negative integers are supported"
-        self.X[self.hash(x)] = 1 
+        self.X[self.hash(x)] = 1
 
     def add(self, xs: Union[int, Iterable[int]]):
         if isinstance(xs, int):
@@ -53,7 +53,7 @@ class BloomFilter:
     @staticmethod
     def optimal_size(p: float, N: int):
         """Optimal M and d for N inserted elements and a desired false positive rate p"""
-    
+   
         M = math.ceil(- N * math.log2(p) / math.log(2))
         d = math.ceil(- math.log2(p))
         return M, d
